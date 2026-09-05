@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import HeroSceneLoader from "@/components/three/HeroSceneLoader";
 
-const container = {
+const container: Variants = {
   hidden: {},
   show: {
     transition: {
@@ -13,12 +13,12 @@ const container = {
   },
 };
 
-const item = {
+const item: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -43,7 +43,7 @@ export default function Home() {
 
           <motion.h1
             variants={item}
-            className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl"
+            className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl bg-gradient-to-r from-white via-purple-200 to-blue-300 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(127,119,221,0.35)]"
           >
             Rashedul Islam Rifat
           </motion.h1>
