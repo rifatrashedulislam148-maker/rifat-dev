@@ -5,8 +5,11 @@ import HeroSceneLoader from "@/components/three/HeroSceneLoader";
 import ScrollIndicator from "@/components/sections/ScrollIndicator";
 import AboutMe from "@/components/sections/AboutMe";
 import Typewriter from "@/components/sections/Typewriter";
+import EducationSection from "@/components/sections/EducationSection";
+import ExperienceSection from "@/components/sections/ExperienceSection";
 import GallerySection from "@/components/sections/GallerySection";
 import SkillsSection from "@/components/sections/SkillsSection";
+import ProjectsSection from "@/components/sections/ProjectsSection";
 import HeroSidePhotos from "@/components/sections/HeroSidePhotos";
 
 const container: Variants = {
@@ -74,8 +77,11 @@ export default function Home() {
       </main>
 
       <AboutMe />
+      <EducationSection />
+      <ExperienceSection />
       <GallerySection />
       <SkillsSection />
+      <ProjectsSection />
     </>
   );
 }
