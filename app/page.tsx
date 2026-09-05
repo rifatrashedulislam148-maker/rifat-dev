@@ -2,6 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import HeroSceneLoader from "@/components/three/HeroSceneLoader";
+import ScrollIndicator from "@/components/sections/ScrollIndicator";
 
 const container: Variants = {
   hidden: {},
@@ -55,6 +56,8 @@ export default function Home() {
             CSE Student • Full-Stack Developer • AI & Research Enthusiast
           </motion.p>
         </motion.div>
+
+        <ScrollIndicator />
       </section>
     </main>
   );
