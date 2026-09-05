@@ -44,7 +44,7 @@ export default function Home() {
 
           <motion.h1
             variants={item}
-            className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl bg-gradient-to-r from-white via-purple-200 to-blue-300 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(127,119,221,0.35)]"
+            className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl bg-linear-to-r from-white via-purple-200 to-blue-300 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(127,119,221,0.35)]"
           >
             Rashedul Islam Rifat
           </motion.h1>

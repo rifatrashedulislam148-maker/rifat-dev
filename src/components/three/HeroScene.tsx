@@ -17,9 +17,10 @@ export default function HeroScene() {
             <CameraRig />
             <EffectComposer>
                 <Bloom
-                    intensity={0.6}
-                    luminanceThreshold={0.15}
-                    luminanceSmoothing={0.9}
+                    intensity={1.4}
+                    luminanceThreshold={0.05}
+                    luminanceSmoothing={0.7}
+                    mipmapBlur
                 />
             </EffectComposer>
         </Canvas>
