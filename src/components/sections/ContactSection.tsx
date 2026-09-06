@@ -2,13 +2,39 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, Loader2, CheckCircle2 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 
 const purposes = ["Internship", "Research", "Freelance", "Project", "Teaching", "General"];
 
 export default function ContactSection() {
     const [selectedPurpose, setSelectedPurpose] = useState<string>("General");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setStatus("loading");
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, purpose: selectedPurpose, message }),
+            });
+
+            if (!res.ok) throw new Error("Failed");
+
+            setStatus("success");
+            setName("");
+            setEmail("");
+            setMessage("");
+        } catch {
+            setStatus("error");
+        }
+    }
 
     return (
         <section
@@ -46,7 +72,7 @@ export default function ContactSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="w-full rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8"
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={handleSubmit}
             >
                 <label className="mb-2 block text-xs uppercase tracking-wide text-muted-foreground">
                     I&apos;m reaching out about
@@ -74,6 +100,9 @@ export default function ContactSection() {
                         </label>
                         <input
                             type="text"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             placeholder="Your name"
                             className="w-full rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm outline-none placeholder:text-muted-foreground/60 focus:border-purple-300/40"
                         />
@@ -84,6 +113,9 @@ export default function ContactSection() {
                         </label>
                         <input
                             type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="you@example.com"
                             className="w-full rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm outline-none placeholder:text-muted-foreground/60 focus:border-purple-300/40"
                         />
@@ -96,6 +128,9 @@ export default function ContactSection() {
                     </label>
                     <textarea
                         rows={4}
+                        required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         placeholder="Tell me a bit about it..."
                         className="w-full resize-none rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm outline-none placeholder:text-muted-foreground/60 focus:border-purple-300/40"
                     />
@@ -103,11 +138,32 @@ export default function ContactSection() {
 
                 <button
                     type="submit"
-                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-linear-to-r from-purple-500 to-blue-500 px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                    disabled={status === "loading"}
+                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-linear-to-r from-purple-500 to-blue-500 px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
-                    <Send className="h-4 w-4" />
-                    Send Message
+                    {status === "loading" ? (
+                        <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Sending...
+                        </>
+                    ) : status === "success" ? (
+                        <>
+                            <CheckCircle2 className="h-4 w-4" />
+                            Message Sent!
+                        </>
+                    ) : (
+                        <>
+                            <Send className="h-4 w-4" />
+                            Send Message
+                        </>
+                    )}
                 </button>
+
+                {status === "error" && (
+                    <p className="mt-3 text-center text-sm text-red-400">
+                        Something went wrong. Please try again or email me directly.
+                    </p>
+                )}
             </motion.form>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4">

@@ -157,24 +157,12 @@
   clip-path: polygon(0 60%, 100% 60%, 100% 82%, 0 82%);
 }
 @keyframes glitch-shift-1 {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-3px, 1px);
-  }
-  100% {
-    transform: translate(2px, -1px);
-  }
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-3px, 1px); }
+  100% { transform: translate(2px, -1px); }
 }
 @keyframes glitch-shift-2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(3px, -1px);
-  }
-  100% {
-    transform: translate(-2px, 1px);
-  }
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(3px, -1px); }
+  100% { transform: translate(-2px, 1px); }
 }
