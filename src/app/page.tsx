@@ -11,6 +11,7 @@ import GallerySection from "@/components/sections/GallerySection";
 import SkillsSection from "@/components/sections/SkillsSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
 import ContactSection from "@/components/sections/ContactSection";
+import Footer from "@/components/sections/Footer";
 import HeroSidePhotos from "@/components/sections/HeroSidePhotos";
 
 const container: Variants = {
@@ -84,6 +85,7 @@ export default function Home() {
             <SkillsSection />
             <ProjectsSection />
             <ContactSection />
+            <Footer />
         </>
     );
 }

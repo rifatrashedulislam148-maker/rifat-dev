@@ -1,43 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
 import { SiGithub, SiYoutube } from "react-icons/si";
 
 interface Project {
+    id: number;
     title: string;
     description: string;
-    tech: string[];
-    status?: string;
-    image?: string;
-    demoUrl?: string;
-    githubUrl?: string;
-    youtubeUrl?: string;
+    tech: string;
+    status: string | null;
+    image: string | null;
+    demoUrl: string | null;
+    githubUrl: string | null;
+    youtubeUrl: string | null;
 }
-
-const projects: Project[] = [
-    {
-        title: "Serenity Resort",
-        description:
-            "A full-stack resort management platform covering bookings, payments, and guest experience end to end. Built with real-world architecture: Firebase authentication, Stripe payment processing, a Gemini-powered AI concierge chatbot ('Lunavia'), and a simulated blockchain-style audit trail for payment integrity.",
-        tech: [
-            "React",
-            "Vite",
-            "Node.js",
-            "Express",
-            "MongoDB",
-            "Firebase Auth",
-            "Stripe",
-            "Gemini AI",
-            "Brevo",
-        ],
-        status: "Phases 1-18 Complete",
-        image: "/serenity-preview.png",
-        demoUrl: "https://serenity-resort-ten.vercel.app/",
-        githubUrl: "https://github.com/rifatrashedulislam148-maker/serenity-resort",
-    },
-];
 
 function BrowserMockup({ image, title }: { image: string; title: string }) {
     return (
@@ -58,6 +37,7 @@ function BrowserMockup({ image, title }: { image: string; title: string }) {
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+    const techList = project.tech.split(",").map((t) => t.trim());
     const hasDemo = Boolean(project.demoUrl);
     const hasGithub = Boolean(project.githubUrl);
     const hasYoutube = Boolean(project.youtubeUrl);
@@ -92,7 +72,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
-                {project.tech.map((t) => (
+                {techList.map((t) => (
                     <span key={t} className="rounded-full border border-white/10 bg-white/3 px-3 py-1 text-xs text-muted-foreground">
                         {t}
                     </span>
@@ -100,15 +80,28 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
-                {hasDemo && <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-purple-500 to-blue-500 px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"><ExternalLink className="h-4 w-4" />Visit Live Site</a>}
-                {hasGithub && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium transition-colors hover:border-white/25"><SiGithub className="h-4 w-4" />GitHub</a>}
-                {hasYoutube && <a href={project.youtubeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium transition-colors hover:border-white/25"><SiYoutube className="h-4 w-4" />Watch Demo</a>}
+                {hasDemo && <a href={project.demoUrl!} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-purple-500 to-blue-500 px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"><ExternalLink className="h-4 w-4" />Visit Live Site</a>}
+                {hasGithub && <a href={project.githubUrl!} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium transition-colors hover:border-white/25"><SiGithub className="h-4 w-4" />GitHub</a>}
+                {hasYoutube && <a href={project.youtubeUrl!} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium transition-colors hover:border-white/25"><SiYoutube className="h-4 w-4" />Watch Demo</a>}
             </div>
         </motion.div>
     );
 }
 
 export default function ProjectsSection() {
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch("/api/projects")
+            .then((res) => res.json())
+            .then((data) => {
+                setProjects(data);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, []);
+
     return (
         <section id="projects" className="relative mx-auto flex max-w-4xl flex-col items-center gap-4 px-6 py-24">
             <motion.p
@@ -131,11 +124,15 @@ export default function ProjectsSection() {
                 Featured Project
             </motion.h2>
 
-            <div className="flex w-full flex-col gap-6">
-                {projects.map((project, i) => (
-                    <ProjectCard key={project.title} project={project} index={i} />
-                ))}
-            </div>
+            {loading ? (
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            ) : (
+                <div className="flex w-full flex-col gap-6">
+                    {projects.map((project, i) => (
+                        <ProjectCard key={project.id} project={project} index={i} />
+                    ))}
+                </div>
+            )}
         </section>
     );
 }
